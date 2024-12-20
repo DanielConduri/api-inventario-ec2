@@ -39,5 +39,5 @@ jobs:
         run: |
           #sudo -S docker rm -f container-api-inventario container-nginx
           #sudo -S docker rmi -f node18 nginx
-          sudo -S docker-compose up --build -d
+          sudo docker-compose up --build -d
 
