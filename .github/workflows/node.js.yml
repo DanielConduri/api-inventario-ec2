@@ -1,0 +1,43 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  start:
+    name: PULL
+    runs-on: self-hosted
+
+    #strategy:
+      #matrix:
+        #node-version: [18.x, 20.x, 22.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    steps:
+    - uses: actions/checkout@v4
+  env:
+    name: SET ENV
+    needs: start
+    runs-on: self-hosted
+    steps:
+      - name: ENV BACK
+        working-directory: ./
+        run: |
+          touch .env
+          echo "${{secrets.PROD_ENV_API_INVENTARIO }}" > .env
+  build:
+    name: DEPLOY
+    needs: env
+    runs-on: self-hosted
+    steps:
+      - name: build
+        run: |
+          #sudo -S docker rm -f container-api-inventario container-nginx
+          #sudo -S docker rmi -f node18 nginx
+          sudo -S docker-compose up --build -d
+

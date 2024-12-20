@@ -1,0 +1,30 @@
+#version: "3.9"
+
+services:
+  api:
+    image: node18
+    container_name: container-api-inventario
+    build: ./
+    expose:
+      - "8000"
+    restart: always
+    env_file: ./.env
+    networks:
+      - backend
+
+  nginx:
+    image: nginx:latest
+    container_name: container-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d/
+    depends_on:
+      - api
+    restart: always
+    networks:
+      - backend
+
+networks:
+  backend:
+    #driver: bridge
